@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Blog\BlogResource;
 use App\Models\Blog;
 use App\Models\User;
 use Exception;
@@ -28,7 +29,7 @@ class BlogController extends Controller
             );
         }
         return response()->json(
-            $blogs,
+            BlogResource::collection($blogs),
             Response::HTTP_OK
         );
     }
@@ -36,21 +37,19 @@ class BlogController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request, Blog $blog)
     {
         DB::beginTransaction();;
         try {
-            $validateRequest = $request->validate([
+            $blog = Blog::create($request->validate([
                 'name' => 'required|string|min:3|max:255',
                 'url' => 'required|string',
                 'user_id' => 'required|unique:blogs,user_id'
-            ]);
-
-            $blog = $user->blog()->create($validateRequest);
+            ]));
 
             DB::commit();
             return response()->json(
-                $blog,
+                BlogResource::make($blog),
                 Response::HTTP_OK
             );
 
@@ -70,7 +69,7 @@ class BlogController extends Controller
     {
         try {
             return response()->json(
-                $blog,
+                BlogResource::make($blog),
                 Response::HTTP_OK
             );
         } catch (Exception $e) {
@@ -92,6 +91,11 @@ class BlogController extends Controller
                 'name' => 'required|string|min:3|max:255',
                 'url' => 'required|string',
             ]));
+            DB::commit();
+            return response()->json(
+                BlogResource::make($blog),
+                Response::HTTP_OK
+            );
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(
@@ -104,10 +108,13 @@ class BlogController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Blog $blog)
     {
+        DB::beginTransaction();
         try {
-            //code...
+            $blog->delete();
+            DB::commit();
+            return response()->noContent();
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(

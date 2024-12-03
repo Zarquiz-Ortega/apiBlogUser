@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/users', [UserController::class, 'store']
-);
+// User Router
+Route::get('users', [UserController::class, 'index']);
+Route::post('users', [UserController::class, 'store']);
+Route::get('users/{user}', [UserController::class, 'show']);
+Route::put('users/{user}', [UserController::class, 'update']);
+Route::delete('users/{user}', [UserController::class, 'destroy']);
+
+Route::apiResource('blogs', BlogController::class);
+Route::get('posts', [PostController::class, 'index']);
+
+
 
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
