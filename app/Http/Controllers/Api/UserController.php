@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class UserController extends Controller
         }
 
         return response()->json(
-            $users, 
+            UserResource::collection($users), 
             Response::HTTP_OK
         );
     }
@@ -63,7 +64,7 @@ class UserController extends Controller
     {
         try {
             return response()->json(
-                $user,
+                UserResource::make($user),
                 Response::HTTP_OK
             );
         } catch (Exception $e) {
@@ -94,7 +95,7 @@ class UserController extends Controller
             DB::commit();
 
             return response()->json(
-                $user,
+                UserResource::make($user),
                 Response::HTTP_OK
             );
 
@@ -112,12 +113,11 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         DB::beginTransaction();
         try {
-            $id = User::findOrFail($id);
-            $id->delete();
+            $user->delete();
             DB::commit();
             return response()->noContent();
         } catch (Exception $e) {
