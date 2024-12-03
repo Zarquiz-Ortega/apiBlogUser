@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\CommentsController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -27,9 +28,8 @@ Route::put('users/{user}', [UserController::class, 'update']);
 Route::delete('users/{user}', [UserController::class, 'destroy']);
 
 Route::apiResource('blogs', BlogController::class);
-Route::get('posts', [PostController::class, 'index']);
-
-
+Route::apiResource('posts', PostController::class);
+Route::apiResource('comments', CommentsController::class);
 
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

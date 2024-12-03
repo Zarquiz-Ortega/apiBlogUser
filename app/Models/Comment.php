@@ -9,17 +9,17 @@ class Comment extends Model
 {
     use HasFactory;
 
-    protected $table = 'commets';
-    protected $fillabel = ['body', 'user_ids'];
+    protected $table = 'comments';
+    protected $fillable = ['body', 'user_id', 'post_id'];
 
     //* relacion 1:N (inversa)
     public function user(){
         return $this->belongsTo(User::class);
     }
 
-    //* relacion N:N inversa
-    public function posts(){
-        return $this->belongsToMany(Post::class);
+    //* relacion 1:N inversa
+    public function post(){
+        return $this->belongsTo(Post::class);
     }
 
 }

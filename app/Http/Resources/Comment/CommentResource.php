@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Resources\Post;
+namespace App\Http\Resources\Comment;
 
-use App\Http\Resources\Blog\BlogResource;
+use App\Http\Resources\Post\PostResource;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class CommentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +17,9 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'title' => $this->title,
             'body' => $this->body,
-            'blog_id' => BlogResource::make($this->whenLoaded('blog')),
+            'user_id' => UserResource::make($this->user),
+            'post_id' => PostResource::make($this->post),
         ];
     }
 }

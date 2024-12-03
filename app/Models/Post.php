@@ -9,17 +9,17 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $table = 'blogs';
-    protected $fillable = ['title','body','blog_id'];
+    protected $table = 'posts';
+    protected $fillable = ['title','body','post_id'];
 
     //* Relacion 1:N inversa
     public function blog() {
         return $this->belongsTo(Blog::class);
     }
 
-    //* Relacion N:N 
+    //* Relacion 1:N 
     public function comments(){
-        return $this->belongsToMany(Comment::class);
+        return $this->hasMany(Comment::class);
     }
 
 }

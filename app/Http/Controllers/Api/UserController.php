@@ -45,7 +45,7 @@ class UserController extends Controller
             ]));
             DB::commit();
             return response()->json(
-                $user,
+                UserResource::make($user),
                 Response::HTTP_CREATED
             );
         } catch (Exception $e) {
