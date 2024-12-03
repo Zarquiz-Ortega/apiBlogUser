@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Ritas para la api
+
 // User Router
 Route::get('users', [UserController::class, 'index']);
 Route::post('users', [UserController::class, 'store']);
