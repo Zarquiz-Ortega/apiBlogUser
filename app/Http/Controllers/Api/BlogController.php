@@ -90,6 +90,7 @@ class BlogController extends Controller
             $blog->update($request->validate([
                 'name' => 'required|string|min:3|max:255',
                 'url' => 'required|string',
+                'user_id' => 'required|unique:blogs,user_id'
             ]));
             DB::commit();
             return response()->json(

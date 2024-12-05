@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -27,7 +28,7 @@ class UserController extends Controller
         }
 
         return response()->json(
-            UserResource::collection($users), 
+            UserResource::collection($users),
             Response::HTTP_OK
         );
     }
@@ -51,7 +52,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(
-                ['message' => 'Error al crear el registro: '. $e->getMessage()],
+                ['message' => 'Error al crear el registro: ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -69,7 +70,7 @@ class UserController extends Controller
             );
         } catch (Exception $e) {
             return response()->json(
-                ['message' => 'Error al hacer la operacion: '. $e->getMessage()],
+                ['message' => 'Error al hacer la operacion: ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -87,7 +88,7 @@ class UserController extends Controller
 
             $validateRequest = $request->validate([
                 'name' => 'required|string|min:3|max:255',
-                'email' => 'required|email|unique:users,email,'. $id,
+                'email' => 'required|email|unique:users,email,' . $id,
             ]);
 
             $user->update($validateRequest);
@@ -98,15 +99,13 @@ class UserController extends Controller
                 UserResource::make($user),
                 Response::HTTP_OK
             );
-
         } catch (Exception $e) {
             DB::rollBack();
 
             return response()->json(
-                ['message' => 'Error al actualizar el reguistro: '. $e->getMessage()],
+                ['message' => 'Error al actualizar el reguistro: ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
-
         }
     }
 
@@ -123,7 +122,29 @@ class UserController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(
-                ['message' => 'Error al realizar la operacion: '. $e->getMessage()],
+                ['message' => 'Error al realizar la operacion: ' . $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    public function getUserWhitoutBlog()
+    {
+        try {
+            $users = User::with('blog')->get();
+            $usersWhitoutBlog = [];
+            foreach ($users as $user) {
+                if ($user->blog === null) {
+                    $usersWhitoutBlog[] = $user;
+                }
+            }
+            return response()->json(
+                UserResource::collection($usersWhitoutBlog),
+                Response::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                ['message' => 'Error al realizar la operacion: ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

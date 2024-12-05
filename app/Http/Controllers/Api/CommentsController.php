@@ -83,7 +83,9 @@ class CommentsController extends Controller
         DB::beginTransaction();
         try {
             $comment->update($request->validate([
-                'body'=> 'required|string'
+                'body'=> 'required|string',
+                'user_id' => 'required',
+                'post_id' => 'required'
             ]));
             DB::commit();
             return response()->json(

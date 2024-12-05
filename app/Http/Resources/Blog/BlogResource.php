@@ -16,6 +16,7 @@ class BlogResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'url' => $this->url,
             'user_id' => UserResource::make($this->user),

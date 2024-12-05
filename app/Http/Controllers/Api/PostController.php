@@ -44,6 +44,7 @@ class PostController extends Controller
                         'body' => 'required|string',
                         'blog_id' => 'required'
                     ]));
+                    
                     DB::commit();
                     return response()->json(
                         PostResource::make($post->load('blog')),
@@ -86,6 +87,7 @@ class PostController extends Controller
             $post->update($request->validate([
                 'title' => 'required|string',
                 'body' => 'required|string',
+                'blog_id' => 'required'
             ]));
             DB::commit();
             return response()->json(

@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $table = 'posts';
-    protected $fillable = ['title','body','post_id'];
+    protected $fillable = ['title','body','blog_id'];
 
     //* Relacion 1:N inversa
     public function blog() {

@@ -23,9 +23,11 @@ use Illuminate\Support\Facades\Route;
 // User Router
 Route::get('users', [UserController::class, 'index']);
 Route::post('users', [UserController::class, 'store']);
+Route::get('users/blogs', [UserController::class, 'getUserWhitoutBlog']);
 Route::get('users/{user}', [UserController::class, 'show']);
 Route::put('users/{user}', [UserController::class, 'update']);
 Route::delete('users/{user}', [UserController::class, 'destroy']);
+
 
 Route::apiResource('blogs', BlogController::class);
 Route::apiResource('posts', PostController::class);
